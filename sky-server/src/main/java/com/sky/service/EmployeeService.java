@@ -23,6 +23,8 @@ public interface EmployeeService {
      */
     void save(EmployeeDTO employeeDTO);
 
+
+
     /**
      * 员工分页查询
      * @param employeePageQueryDTO
@@ -30,9 +32,24 @@ public interface EmployeeService {
      */
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
 
+
+
     /**
      * 根据id启用禁用员工账号
      *
      */
     void startOrStop(Integer status, Long id);
+
+
+
+    /**
+     * 根据id查询员工
+     */
+    Employee getById(Long id);
+
+
+    /**
+     * 编辑员工信息
+     */
+    void update(EmployeeDTO employeeDTO);
 }

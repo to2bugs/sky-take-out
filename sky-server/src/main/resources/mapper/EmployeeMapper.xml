@@ -19,6 +19,11 @@
     </select>
 
 
+    <select id="getById" resultType="Employee">
+        select * from employee where id = #{id}
+    </select>
+
+
     <update id="update" parameterType="Employee">
         update employee
         <set>
