@@ -16,6 +16,7 @@ spring:
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
+  # 用于指定实体类的包路径，以便在映射文件中使用简短的类名而不是完整的类路径
   type-aliases-package: com.sky.entity
   configuration:
     #开启驼峰命名
