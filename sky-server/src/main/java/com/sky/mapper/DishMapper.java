@@ -46,4 +46,12 @@ public interface DishMapper {
      *
      */
     Dish getById(Long id);
+
+
+    /**
+     * 修改菜品表的基本信息
+     * @param dish
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }
