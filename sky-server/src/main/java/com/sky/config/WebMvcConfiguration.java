@@ -47,7 +47,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * 在程序启动的时候，会执行docket()方法，生成一个docket对象，放入springboot的IOC容器中
      */
     @Bean
-    public Docket docket() {
+    public Docket docket1() {
         log.info("开始创建docket对象...准备生产接口文档");
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("苍穹外卖项目接口文档")
@@ -55,9 +55,28 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller")) // 指定生产接口需要扫描的包
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin")) // 指定生产接口需要扫描的包
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
+    @Bean
+    public Docket docket2() {
+        log.info("开始创建docket对象...准备生产接口文档");
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("苍穹外卖项目接口文档")
+                .version("2.0")
+                .description("苍穹外卖项目接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user")) // 指定生产接口需要扫描的包
                 .paths(PathSelectors.any())
                 .build();
         return docket;
