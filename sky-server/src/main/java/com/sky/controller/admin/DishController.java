@@ -10,9 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜品管理
@@ -25,6 +27,8 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 新增菜品
@@ -36,6 +40,8 @@ public class DishController {
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品: {}", dishDTO);
         dishService.saveWithFlavor(dishDTO);
+        // 清除缓存数据
+        redisTemplate.delete("dish_" + dishDTO.getCategoryId());
         return Result.success();
     }
 
@@ -60,6 +66,8 @@ public class DishController {
     public Result delete(@RequestParam("ids") List<Long> ids) {
         log.info("菜品的批量删除: {}", ids);
         dishService.deleteBatch(ids);
+        // 将所有的菜品缓存数据清楚掉，即清除掉key以dish_开头的所有数据
+        redisTemplate.delete(redisTemplate.keys("dish_*"));
         return Result.success();
     }
 
@@ -84,6 +92,17 @@ public class DishController {
     public Result update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品: {}", dishDTO);
         dishService.updateWidthFlavor(dishDTO);
+        // 将所有的菜品缓存数据清楚掉，即清除掉key以dish_开头的所有数据
+        redisTemplate.delete(redisTemplate.keys("dish_*"));
         return Result.success();
+    }
+
+    /**
+     * 清理Redis缓存数据
+     * @param partten
+     */
+    private void cleanRedisCache(String partten) {
+        Set keys = redisTemplate.keys(partten);
+        redisTemplate.delete(keys);
     }
 }
